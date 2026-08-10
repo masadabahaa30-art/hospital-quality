@@ -261,5 +261,5 @@ if hospital_file is not None:
         else:
             st.warning("عذراً، الشيت لا يحتوي على أعمدة ذات بيانات رقمية واضحة للرسم البياني الفوري، ولكن يمكنك استعراض الجدول بالأسفل.")
             
-    -except Exception as e:
+        except Exception as e:
         st.error(f"حدث خطأ أثناء قراءة الملف، تأكد من صيغة الاكسيل: {e}")
