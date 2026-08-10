@@ -255,16 +255,11 @@ if hospital_file is not None:
         
         # اختيار الأعمدة الرقمية فقط للرسم لتجنب أي أخطاء
         numeric_df = df_hospital.select_dtypes(include=['number'])
-        
         if not numeric_df.empty:
-            st.bar_chart(numeric_df)
-        else:
-            st.warning("عذراً، الشيت لا يحتوي على أعمدة ذات بيانات رقمية واضحة للرسم البياني الفوري، ولكن يمكنك استعراض الجدول بالأسفل.")
-            if not numeric_df.empty:
             st.bar_chart(numeric_df)
         else:
             st.warning("عذراً، الشيت لا يحتوي على أعمدة رقمية للرسم البياني.")
             
     except Exception as e:
         st.error(f"حدث خطأ أثناء قراءة الملف: {e}")
-       
+        
