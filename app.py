@@ -225,3 +225,41 @@ elif selected_dept == "العيادات الخارجية":
 st.sidebar.markdown("---")
 st.sidebar.info("💡 **نظام صلاحيات الأقسام:** كل قسم مخصص له كلمة مرور ورقم سري خاص به لضمان التخصصية وسرية البيانات.")
 st.sidebar.write("تطوير: Dr. Maiada Bahaa")
+# --- أضيفي هذا الكود في نهاية ملف app.py ---
+
+import streamlit as st
+import pandas as pd
+
+st.markdown("---")
+st.subheader("📊 قسم تحليل شيتات الجودة الخاصة بالمستشفى")
+
+# 1. أداة رفع الشيت (تدعم ملفات الاكسيل بجميع أشكالها)
+hospital_file = st.file_uploader("اختر أو اسحب شيت الاكسيل الخاص بالمستشفى هنا", type=["xlsx", "xls"])
+
+if hospital_file is not None:
+    try:
+        # قراءة الشيت أوتوماتيك
+        df_hospital = pd.read_excel(hospital_file)
+        
+        st.success("تم رفع الشيت بنجاح! 🎉")
+        
+        # 2. عرض معاينة للبيانات الموجودة في الشيت
+        st.write("### معاينة بيانات الشيت:")
+        st.dataframe(df_hospital.head(10)) # يعرض أول 10 صفوف للتأكد
+        
+        # 3. عرض ملخص سريع وأرقام عن الشيت
+        st.info(f"عدد الصفوف (الصفوف/الحالات): {df_hospital.shape[0]} | عدد الأعمدة (المؤشرات): {df_hospital.shape[1]}")
+        
+        # 4. محاولة ذكية لرسم الجراف (تلقائياً لأي أعمدة أرقام موجودة)
+        st.write("### 📈 الرسم البياني التحليلي للبيانات:")
+        
+        # اختيار الأعمدة الرقمية فقط للرسم لتجنب أي أخطاء
+        numeric_df = df_hospital.select_dtypes(include=['number'])
+        
+        if not numeric_df.empty:
+            st.bar_chart(numeric_df)
+        else:
+            st.warning("عذراً، الشيت لا يحتوي على أعمدة ذات بيانات رقمية واضحة للرسم البياني الفوري، ولكن يمكنك استعراض الجدول بالأسفل.")
+            
+    -except Exception as e:
+        st.error(f"حدث خطأ أثناء قراءة الملف، تأكد من صيغة الاكسيل: {e}")
